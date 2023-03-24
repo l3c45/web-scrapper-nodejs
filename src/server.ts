@@ -9,38 +9,94 @@ async function scrape() {
   const page = await browser.newPage();
   const obj = new Array();
 
-  for (let j = 1; j < 50; j++) {
-    console.log(`CURRENT URL: ${process.env.URL!}${j}`);
+  await page.setViewport({width: 1280, height: 1024});
 
-    await page.goto(`${process.env.URL!}${j}`);
+  for (let j = 1; j < 2; j++) {
+    console.log(`CURRENT URL: ${process.env.COTO!}`);
+
+    await page.goto(`${process.env.COTO!}`);
+
 
     const ul = await page.waitForSelector(
-      `#studio-scenes > div > div.thumbnails`
+      `#products`
     );
+
     const ul_long = await page.evaluate(
-      (element) => element?.childElementCount,
+      (element) => {
+       return  element?.childElementCount},
       ul
     );
+
+    const childs = await page.evaluate(
+      (element) => {
+        const items=Array.from(element?.querySelectorAll(".clearfix")!)
+        return items?.map(i=>i.getAttribute("id")) },
+      ul
+    );
+
+
+console.log(childs);
+
+
     console.log("PAGE :",j, "TOTAL ELEMENTS : ", ul_long);
 
-    for (let index = 1; index < ul_long!; index++) {
-      const element = await page.waitForSelector(
-        `#studio-scenes > div > div.thumbnails > div:nth-child(${index})`
-      );
-      const text: string = await page.evaluate(
-        (element) =>
-          element
-            ?.querySelector(".thumbnail-image")
-            // @ts-ignore
-            ?.querySelector(".thumbnail-avatar")?.attributes["style"].value,
-        element
-      );
-      const trimmed = text.substring(21, text.length - 1);
 
-      obj.push(trimmed);
-      downloadImage(trimmed);
+   // for (let index = 1; index < ul_long!; index++) {
+
+for (const product of childs) {
+
+  //#descrip_container_sku00142658
+  //li_prod00237235
+  const code=product?.substring(7,product.length)
+
+ 
+      const element = await page.waitForSelector(
+        `#descrip_container_sku${code}`
+      );
+
+      
+      const text = await page.evaluate(
+        (element) =>{
+      
+
+        return element?.textContent
+     
+}
+        ,element
+      );
+
+      console.log(text);
+      
+
+//       const price=await page.waitForSelector(
+// `div.lyracons-search-result-1-x-galleryItem:nth-child(1) > section:nth-child(1) > a:nth-child(1) > article:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)  `
+//     ,{timeout:60000}  )
+// console.log(price);
+
+      // const price_text = await page.evaluate(
+      //   (el) =>{
+      //     console.log(el);
+
+      //     const int=el?.querySelector(".lyracons-carrefourarg-product-price-1-x-currencyInteger")?.innerHTML
+      //     const dec=el?.querySelector(".lyracons-carrefourarg-product-price-1-x-currencyFraction")?.innerHTML
+      //    console.log(int,dec);
+
+      //     return Number(`${int},${dec}`)
+      //   }
+      //   ,price
+      // );
+
+
+
+
+     // console.log(text,":");
+
+
+
+   }
+
+
     }
-  }
 
   var jsonContent = JSON.stringify(obj);
 
@@ -51,4 +107,4 @@ async function scrape() {
 
 
 
-scrape();
+scrape()
