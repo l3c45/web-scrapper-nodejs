@@ -1,0 +1,23 @@
+{
+  "name": "market-scapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "tsnd --exit-child --transpile-only src/server.ts",
+    "build": "rimraf ./build && tsc -p tsconfig.json",
+    "start": "npm run build && node build/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "*",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "nanoid": "3.3.4",
+    "puppeteer": "^19.7.5"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules
+downloads
+pnpm-lock.yaml
+build
+.env*
+.env
+output.json
+.prettierrc
