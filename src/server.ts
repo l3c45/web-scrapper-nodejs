@@ -5,7 +5,9 @@ import { scrape } from "./scrapper";
 
 async function main(){
   const entries= await scrape();
-  saveToFile(entries)
+  //console.log();
+  
+  //saveToFile(entries)
 }
 
 main()
